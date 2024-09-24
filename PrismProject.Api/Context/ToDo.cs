@@ -1,0 +1,10 @@
+﻿namespace PrismProject.Api.Context
+{
+    public class ToDo : BaseEntity
+    {
+        public string Title { get; set; }
+        public string? Content { get; set; }
+        public int Status { get; set; }
+        public int UserId { get; set; }
+    }
+}

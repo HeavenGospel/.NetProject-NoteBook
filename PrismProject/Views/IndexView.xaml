@@ -1,0 +1,250 @@
+﻿<UserControl
+    x:Class="PrismProject.Views.IndexView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dialog="clr-namespace:PrismProject.Views.Dialogs"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+    <materialDesign:DialogHost CloseOnClickAway="False" Identifier="IndexDialogHost">
+        <!--  主窗口的其他内容  -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Margin="15,10"
+                FontSize="20"
+                Text="{Binding Greet}" />
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBars}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Margin="10"
+                            Background="{Binding Color}"
+                            CornerRadius="5">
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect
+                                                        BlurRadius="10"
+                                                        ShadowDepth="2"
+                                                        Color="#DDDDDD" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <!--  Use the current DataContext as the CommandParameter  -->
+                                    <i:InvokeCommandAction Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+
+                            <Grid>
+                                <StackPanel Margin="15,0,0,0">
+                                    <materialDesign:PackIcon
+                                        Width="30"
+                                        Height="30"
+                                        Margin="0,5,0,0"
+                                        Kind="{Binding Icon}" />
+                                    <TextBlock
+                                        Margin="0,10,0,0"
+                                        FontSize="15"
+                                        Text="{Binding Title}" />
+                                    <TextBlock
+                                        FontSize="40"
+                                        FontWeight="Bold"
+                                        Text="{Binding Content}" />
+                                </StackPanel>
+                                <Canvas ClipToBounds="True">
+                                    <Border
+                                        Canvas.Top="10"
+                                        Canvas.Right="-50"
+                                        Width="120"
+                                        Height="120"
+                                        Background="#FFFFFF"
+                                        CornerRadius="100"
+                                        Opacity="0.15" />
+                                    <Border
+                                        Canvas.Top="60"
+                                        Canvas.Right="-30"
+                                        Width="120"
+                                        Height="120"
+                                        Background="#FFFFFF"
+                                        CornerRadius="100"
+                                        Opacity="0.15" />
+                                </Canvas>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid Grid.Row="2" Margin="0,10,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Margin="10,0,0,0"
+                    Background="#BEBEBE"
+                    CornerRadius="5"
+                    Opacity="0.1" />
+
+                <DockPanel Margin="20,0,20,0">
+                    <DockPanel
+                        Margin="0,10,0,0"
+                        DockPanel.Dock="Top"
+                        LastChildFill="False">
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Text="待办事项" />
+                        <Button
+                            Width="30"
+                            Height="30"
+                            Margin="0,0,-10,0"
+                            VerticalAlignment="Top"
+                            Command="{Binding AddTodoCommand}"
+                            DockPanel.Dock="Right"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingActionSecondaryButton}">
+                            <materialDesign:PackIcon Kind="Add" />
+                        </Button>
+                    </DockPanel>
+
+                    <ListBox
+                        x:Name="TodoDtos"
+                        Margin="0,0,-10,0"
+                        HorizontalContentAlignment="Stretch"
+                        ItemsSource="{Binding TodoDtos}">
+                        <ListBox.Resources>
+                            <!--  为 ScrollBar 应用自定义样式  -->
+                            <Style BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" TargetType="ScrollBar" />
+                        </ListBox.Resources>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding UpdateTodoCommand}" CommandParameter="{Binding ElementName=TodoDtos, Path=SelectedItem}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel
+                                    MaxHeight="80"
+                                    Margin="0,0,0,5"
+                                    LastChildFill="False">
+                                    <ToggleButton
+                                        x:Name="myToggleButton"
+                                        Command="{Binding DataContext.FinishTodoCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        DockPanel.Dock="Right" />
+                                    <StackPanel>
+                                        <TextBlock FontSize="20" Text="{Binding Title}" />
+                                        <TextBlock
+                                            FontSize="15"
+                                            Opacity="0.5"
+                                            Text="{Binding Content}" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                        <!--  使用固定宽度的 ScrollViewer 来保持布局  -->
+                        <ListBox.Template>
+                            <ControlTemplate TargetType="ListBox">
+                                <Grid>
+                                    <ScrollViewer
+                                        x:Name="PART_ScrollViewer"
+                                        HorizontalScrollBarVisibility="Hidden"
+                                        VerticalScrollBarVisibility="Visible">
+                                        <ItemsPresenter />
+                                    </ScrollViewer>
+                                </Grid>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+                </DockPanel>
+
+                <Border
+                    Grid.Column="1"
+                    Margin="10,0"
+                    Background="#BEBEBE"
+                    CornerRadius="5"
+                    Opacity="0.1" />
+
+                <DockPanel Grid.Column="1" Margin="20,0,20,0">
+                    <DockPanel
+                        Margin="0,10,0,0"
+                        DockPanel.Dock="Top"
+                        LastChildFill="False">
+                        <TextBlock
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Text="备忘录" />
+                        <Button
+                            Width="30"
+                            Height="30"
+                            VerticalAlignment="Top"
+                            Command="{Binding AddMemoCommand}"
+                            DockPanel.Dock="Right"
+                            FontSize="15"
+                            Style="{StaticResource MaterialDesignFloatingActionSecondaryButton}">
+                            <materialDesign:PackIcon Kind="Add" />
+                        </Button>
+                    </DockPanel>
+
+                    <ListBox x:Name="MemoDtos" ItemsSource="{Binding MemoDtos}">
+                        <ListBox.Resources>
+                            <!--  为 ScrollBar 应用自定义样式  -->
+                            <Style BasedOn="{StaticResource MaterialDesignScrollBarMinimal}" TargetType="ScrollBar" />
+                        </ListBox.Resources>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding UpdateMemoCommand}" CommandParameter="{Binding ElementName=MemoDtos, Path=SelectedItem}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel MaxHeight="80" Margin="0,0,0,5">
+                                    <TextBlock FontSize="20" Text="{Binding Title}" />
+                                    <TextBlock
+                                        FontSize="15"
+                                        Opacity="0.5"
+                                        Text="{Binding Content}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Grid>
+        </Grid>
+
+        <!--  弹窗  -->
+        <materialDesign:DialogHost.DialogContent>
+            <ContentControl x:Name="DialogContentControl" />
+        </materialDesign:DialogHost.DialogContent>
+    </materialDesign:DialogHost>
+</UserControl>

@@ -1,0 +1,67 @@
+﻿<prism:PrismApplication
+    x:Class="PrismProject.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PrismProject"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Light"
+                    PrimaryColor="Indigo"
+                    SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--  设置图标，文字白色（报错没事）  -->
+            <!--
+            <SolidColorBrush x:Key="MaterialDesign.Body" Color="White" />
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{StaticResource MaterialDesign.Body}" />
+            </Style>
+            <Style TargetType="{x:Type materialDesign:PackIcon}">
+                <Setter Property="Foreground" Value="{StaticResource MaterialDesign.Body}" />
+            </Style>-->
+            <!--  ==========================================================================  -->
+            <!-- 还有在MainWindow.xmal里添加  Foreground="White"
+            <ToggleButton
+            x:Name="MenuToggleButton"
+            AutomationProperties.Name="HamburgerToggleButton"
+            Foreground="White"
+            IsChecked="False"
+            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+            -->
+
+            <!--  侧边栏菜单样式  -->
+            <Style x:Key="MyListBoxItemStyle" TargetType="ListBoxItem">
+                <Setter Property="MinHeight" Value="40" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid>
+                                <Border x:Name="borderHeader" />
+                                <Border x:Name="border" />
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="borderHeader" Property="BorderThickness" Value="4,0,0,0" />
+                                    <Setter TargetName="borderHeader" Property="BorderBrush" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+                                    <Setter TargetName="border" Property="Opacity" Value="0.2" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+                                    <Setter TargetName="border" Property="Opacity" Value="0.2" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>

@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="PrismProject.Views.MinSetting"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninx.net/winfx/xaml/themes"
+    xmlns:prism="http://prismlibrary.com/"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+
+    <Grid>
+        <StackPanel Margin="20">
+            <TextBlock
+                Margin="0,50,0,10"
+                HorizontalAlignment="Center"
+                FontSize="30"
+                FontWeight="Bold"
+                Text="上传您的头像" />
+
+            <Image
+                Name="OriginalImage"
+                Width="100"
+                Height="100"
+                Margin="0,0,0,20"
+                Source="{Binding AvatarSource}"
+                Stretch="UniformToFill">
+                <Image.Clip>
+                    <EllipseGeometry
+                        Center="50,50"
+                        RadiusX="50"
+                        RadiusY="50" />
+                </Image.Clip>
+            </Image>
+
+            <Button
+                Width="200"
+                Height="50"
+                Margin="0,0,0,20"
+                Command="{Binding SelectImageCommand}"
+                Content="选择图片"
+                Style="{StaticResource MaterialDesignRaisedButton}" />
+
+            <Button
+                Width="200"
+                Height="50"
+                Command="{Binding UploadCommand}"
+                Content="上传"
+                Style="{StaticResource MaterialDesignRaisedButton}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
